@@ -1,7 +1,7 @@
 const exp = require("constants");
 const express = require("express");
 const userRouter = require("./routes/user_routes");
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use((req, res) => {
