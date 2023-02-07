@@ -17,15 +17,17 @@ class UserController {
   }
 
   async authorize(req, res) {
+    const response = {isAuthorized: false};
     const { user_name, password } = req.body;
     const user = await db.query("select * from users where user_name = $1", [user_name]);
     const isPasswordsEqual = await checkPassword(password, user.rows[0].password);
     if (!isPasswordsEqual) {
       res.statusCode = 400;
-      res.end("Access denied!");
+      res.json(response);
       return;
     }
-    res.end("Access allowed!");
+    response.isAuthorized = true
+    res.json(response);
   }
 
    createUser = async (req, res) => {
@@ -33,9 +35,8 @@ class UserController {
     const usersInDB = await this.getUsers();
     const errors = [];
     usersInDB.forEach(user => {
-      if (user.email === email) errors.push("Email already in use!");
-      if (user.permalink === permalink) errors.push("Permalink already in use!");
-      if (user.user_name === user_name) errors.push("User name already in use!");
+      if (user.email.toLowerCase() === email.toLowerCase()) errors.push("Email already in use!");
+      if (user.user_name.toLowerCase() === user_name.toLowerCase()) errors.push("User name already in use!");
     });
     if (errors.length) {
       res.statusCode = 400;
