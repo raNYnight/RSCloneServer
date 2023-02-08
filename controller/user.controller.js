@@ -43,7 +43,7 @@ class UserController {
     });
     if (errors.length) {
       res.statusCode = 400;
-      res.end(errors.join("\n"));
+      res.json({denyReasons: errors});
       return;
     }
     const hashedPassword = await encrypt.hashPassword(password);
