@@ -6,5 +6,6 @@ router.get("/tests", testController.getTestsInfo);
 router.get("/played/:test_id", testController.getPlayedTestsInfo);
 router.get("/users/:id/played", testController.getUserPlayedAllTests);
 router.get("/users/:id/played/:test_id", testController.getUserPlayedSpecificTest);
+router.post("/tests", testController.createTest);
 
 module.exports = router;

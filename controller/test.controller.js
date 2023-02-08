@@ -26,5 +26,15 @@ class TestController {
       WHERE user_id = ${user_id} AND tests_id = ${test_id}`);
     res.header("Content-Type", "application/json").status(200).send(JSON.stringify(user_tests.rows));
   }
+
+  createTest = async (req, res) => {
+    const { user_id, tests_id, date, score } = req.body;
+
+    const newTest = await db.query(
+      `INSERT INTO users_tests  (user_id, tests_id, date, score) values ($1, $2, $3, $4) RETURNING *`,
+      [user_id, tests_id, date, score]
+    );
+    res.header("Content-Type", "application/json").status(200).send(JSON.stringify(newTest.rows[0]));
+  };
 }
 module.exports = new TestController();
