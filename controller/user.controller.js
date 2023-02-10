@@ -36,12 +36,18 @@ class UserController {
   createUser = async (req, res) => {
     const { email, user_name, password, registration_date, permalink } = req.body;
     const usersInDB = await this.getUsers();
-    const errors = [];
+    const errors = {en: [], ru:[]};
     usersInDB.forEach((user) => {
-      if (user.email.toLowerCase() === email.toLowerCase()) errors.push("Email already in use!");
-      if (user.user_name.toLowerCase() === user_name.toLowerCase()) errors.push("User name already in use!");
+      if (user.email.toLowerCase() === email.toLowerCase()){
+        errors.en.push("Email is taken");
+        errors.ru.push("Эл. почта уже занята");
+      } 
+      if (user.user_name.toLowerCase() === user_name.toLowerCase()){
+        errors.en.push("Username is taken");
+        errors.ru.push("Имя пользователя уже занято");
+      } 
     });
-    if (errors.length) {
+    if (errors.en.length) {
       res.statusCode = 400;
       res.json({denyReasons: errors});
       return;
