@@ -19,6 +19,14 @@ class UserController {
   async authorize(req, res) {
     const { user_name, password } = req.body;
     const user = await db.query("select * from users where user_name = $1", [user_name]);
+    if (!user.rows.length){
+      res.statusCode = 400;
+      res.json({
+        isAuthorized: false,
+        user_id: null,
+      });
+      return;
+    }
     const isPasswordsEqual = await checkPassword(password, user.rows[0].password);
     const response = {
       isAuthorized: false,
